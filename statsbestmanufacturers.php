@@ -29,13 +29,13 @@ if (!defined('_PS_VERSION_')) {
 
 class statsbestmanufacturers extends ModuleGrid
 {
-    private $html = null;
-    private $query = null;
-    private $columns = null;
-    private $default_sort_column = null;
-    private $default_sort_direction = null;
-    private $empty_message = null;
-    private $paging_message = null;
+    private $html;
+    private $query;
+    private $columns;
+    private $default_sort_column;
+    private $default_sort_direction;
+    private $empty_message;
+    private $paging_message;
 
     public function __construct()
     {
