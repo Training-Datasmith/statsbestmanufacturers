@@ -83,11 +83,23 @@ class statsbestmanufacturers extends ModuleGrid
         $this->ps_versions_compliancy = ['min' => '1.7.1.0', 'max' => _PS_VERSION_];
     }
 
+    /**
+     * Install the module and register the stats dashboard hook.
+     *
+     * @return bool True on successful installation, false otherwise
+     */
     public function install()
     {
         return parent::install() && $this->registerHook('displayAdminStatsModules');
     }
 
+    /**
+     * Render the best-manufacturers ranking grid on the admin statistics dashboard.
+     *
+     * @param array $params Hook parameters passed by PrestaShop (unused)
+     *
+     * @return string HTML output for the statistics widget
+     */
     public function hookDisplayAdminStatsModules($params)
     {
         $engine_params = [
@@ -130,6 +142,13 @@ class statsbestmanufacturers extends ModuleGrid
         return Db::getInstance()->getValue($sql);
     }
 
+    /**
+     * Build and execute the manufacturer ranking query, populating $this->_values and $this->_totalCount.
+     *
+     * @return void
+     *
+     * @complexity O(m * p) where m = manufacturers and p = products per manufacturer in scope
+     */
     public function getData()
     {
         $this->_totalCount = $this->getTotalCount();
