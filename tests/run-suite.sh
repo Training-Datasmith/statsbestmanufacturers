@@ -7,7 +7,7 @@ USE_SUDO_DOCKER="${USE_SUDO_DOCKER:-0}"
 
 PHP_IMAGE="php@sha256:6ce95208609dc66df163ab936c970b3b34cd901b85c747102c5999f08ade9143"
 MARIADB_IMAGE="mariadb@sha256:f1c56f035ed268a0d7c2c2e06dc879f6319b997cb434cf822a4cfd72a7aa184d"
-PHP56_LOCAL_IMAGE="statsbestmanufacturers-php56:local"
+PHP56_LOCAL_IMAGE=""
 NETWORK_NAME="statsbest-net"
 DB_CONTAINER="statsbest-db"
 
@@ -108,10 +108,21 @@ start_database() {
   done
 }
 
+resolve_php56_image_tag() {
+  local dockerfile="${REPO_ROOT}/tests/docker/php56.Dockerfile"
+  local hash
+  hash="$(sha256sum "${dockerfile}" | awk '{print $1}')"
+  PHP56_LOCAL_IMAGE="statsbestmanufacturers-php56:${hash}"
+  export PHP56_LOCAL_IMAGE
+}
+
 build_php_runner() {
+  resolve_php56_image_tag
   if ! docker_cmd image inspect "${PHP56_LOCAL_IMAGE}" >/dev/null 2>&1; then
     docker_cmd pull "${PHP_IMAGE}"
-    docker_cmd build -t "${PHP56_LOCAL_IMAGE}" -f "${REPO_ROOT}/tests/docker/php56.Dockerfile" "${REPO_ROOT}/tests/docker"
+    docker_cmd pull "debian@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc"
+    docker_cmd build --no-cache -t "${PHP56_LOCAL_IMAGE}" \
+      -f "${REPO_ROOT}/tests/docker/php56.Dockerfile" "${REPO_ROOT}/tests/docker"
   fi
 }
 

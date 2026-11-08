@@ -73,7 +73,9 @@ $xml .= '         convertErrorsToExceptions="true"' . "\n";
 $xml .= '         convertNoticesToExceptions="true"' . "\n";
 $xml .= '         convertWarningsToExceptions="true"' . "\n";
 $xml .= '         backupGlobals="false"' . "\n";
-$xml .= '         backupStaticAttributes="false">' . "\n";
+$xml .= '         backupStaticAttributes="false"' . "\n";
+$xml .= '         beStrictAboutOutputDuringTests="true"' . "\n";
+$xml .= '         beStrictAboutTestsThatDoNotTestAnything="true">' . "\n";
 $xml .= '  <testsuites>' . "\n";
 $xml .= '    <testsuite name="module-tests">' . "\n";
 foreach ($files as $file) {

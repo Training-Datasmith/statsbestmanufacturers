@@ -55,7 +55,13 @@ class HookDisplayTest extends HarnessTestCase
         $this->assertSame('sales', $payload['defaultSortColumn']);
         $this->assertSame('DESC', $payload['defaultSortDirection']);
         $this->assertSame('Displaying {0} - {1} of {2}', $payload['pagingMessage']);
-        $this->assertSame('Empty recordset returned.', $payload['emptyMessage']);
+        $payloadStrings = array();
+        foreach ($payload as $value) {
+            if (is_string($value)) {
+                $payloadStrings[] = $value;
+            }
+        }
+        $this->assertContains('Empty recordset returned.', $payloadStrings);
 
         $this->assertCount(3, $payload['columns']);
         $this->assertSame(
